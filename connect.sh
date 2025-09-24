@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-# set -x
 
 export LANG=C.UTF-8
 export LC_ALL=C.UTF-8
@@ -7,8 +6,6 @@ export LC_ALL=C.UTF-8
 CONFIG=$(realpath "$1")
 
 cd "${0%/*}" || exit 1
-
-[ -d './tmp' ] || exit 1
 
 RANDOMHOST=$(openssl rand -hex 12)
 CONFIGHOST=$(grep '^remote ' "$CONFIG" | awk '{ print $2; }')
