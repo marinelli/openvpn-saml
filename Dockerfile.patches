@@ -1,10 +1,10 @@
 # syntax=docker/dockerfile:1
 
-FROM alpine:latest as bootstrap-stage
+FROM alpine:latest AS bootstrap-stage
 ADD scripts /src/scripts
 RUN sh /src/scripts/addpatch-bootstrap.sh
 
-FROM bootstrap-stage as patch-stage
+FROM bootstrap-stage AS patch-stage
 ADD patches /src/patches
 WORKDIR /src
 ARG VERSION_A
