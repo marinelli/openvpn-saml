@@ -1,11 +1,11 @@
 # syntax=docker/dockerfile:1
 
 FROM alpine:latest AS bootstrap-stage
-ADD scripts /src/scripts
+ADD openvpn/scripts /src/scripts
 RUN sh /src/scripts/build-bootstrap.sh
 
 FROM bootstrap-stage AS build-stage
-ADD patches /src/patches
+ADD openvpn/patches /src/patches
 WORKDIR /src
 ARG VERSION
 RUN sh /src/scripts/build.sh "$VERSION"

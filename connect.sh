@@ -16,21 +16,24 @@ _patch_config() {
   grep -vE '^(remote |remote-random-hostname|auth-federate|auth-user-pass|auth-retry interact)' "$1"
 }
 
-_print_auth() {
-  printf 'N/A\n%s\n' "$1"
-}
-
 _connect() {
   local AUTH="$1"
+  local UPDOWN='/etc/openvpn/update-systemd-resolved'
+  local EXTRAS
+  if [ -f "$UPDOWN" ]; then
+    EXTRAS="--script-security 2 --up $UPDOWN --down $UPDOWN --down-pre"
+  fi
+  # shellcheck disable=SC2086
   ./bin/openvpn \
-    --config <(_patch_config "$CONFIG") --auth-user-pass <(_print_auth "$AUTH") \
-    --verb 3 --remote "$REMOTEHOST" "$REMOTEPORT"
+    --config <(_patch_config "$CONFIG") --auth-user-pass <(printf 'N/A\n%s\n' "$AUTH") \
+    --verb 3 --dhcp-option DOMAIN-ROUTE . $EXTRAS \
+    --remote "$REMOTEHOST" "$REMOTEPORT"
 }
 
 SSO=$(_connect 'ACS::35001' | sed -rn -e 's/^.*(AUTH_FAILED,CRV1.*)$/\1/p')
 
-URL=$(echo "$SSO" | grep -Eo 'https://.+')
-SID=$(echo "$SSO" | cut -f 3 -d :)
+URL=$(printf '%s\n' "$SSO" | grep -Eo 'https://.+')
+SID=$(printf '%s\n' "$SSO" | cut -f 3 -d :)
 
 [ -n "$URL" ] || exit 1
 [ -n "$SID" ] || exit 1
