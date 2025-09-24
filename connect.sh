@@ -35,23 +35,20 @@ SID=$(echo "$SSO" | cut -f 3 -d :)
 [ -n "$URL" ] || exit 1
 [ -n "$SID" ] || exit 1
 
-printf '>>> Login: %s\n' "$URL"
+printf '%s\n' "$URL"
 
-_decode() {
-  local ENCODED="${1//+/ }"
-  printf '%b' "${ENCODED//%/\\x}"
-}
-
-_saml_response() {
+_saml_server() {
   local RESPONSE
   RESPONSE=$(
     printf 'HTTP/1.1 200 OK\r\n\r\n OK\r\n' |
       nc -I2048 -w1 -l 127.0.0.1 35001 |
       sed -rn -e 's/^.*SAMLResponse=([^&]+).*$/\1\n/p'
   )
-  _decode "$RESPONSE"
+  local ENCODED
+  ENCODED="${RESPONSE//+/ }"
+  printf '%b' "${ENCODED//%/\\x}"
 }
 
-SAML=$(_saml_response)
+SAML=$(_saml_server)
 
 _connect "CRV1::${SID}::${SAML}"
