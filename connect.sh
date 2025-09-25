@@ -7,10 +7,15 @@ CONFIG=$(realpath "$1")
 
 cd "${0%/*}" || exit 1
 
-RANDOMHOST=$(openssl rand -hex 12)
-CONFIGHOST=$(grep '^remote ' "$CONFIG" | awk '{ print $2; }')
-REMOTEPORT=$(grep '^remote ' "$CONFIG" | awk '{ print $3; }')
-REMOTEHOST=$(dig +short +aaonly "$RANDOMHOST.$CONFIGHOST" | head -n1)
+IFS=" " read -r -a REMOTE <<<"$(grep '^remote ' "$CONFIG")"
+REMOTEHOST="${REMOTE[1]}"
+REMOTEPORT="${REMOTE[2]}"
+[ -n "$REMOTEHOST" ] || exit 1
+[ -n "$REMOTEPORT" ] || exit 1
+
+RANDOMHOST=$(cat /dev/random | tr -dc 'a-z0-9' | head -c24)
+REMOTEADDR=$(dig +short +aaonly "${RANDOMHOST}.${REMOTEHOST}" | head -n1)
+[ -n "$REMOTEADDR" ] || exit 1
 
 _patch_config() {
   grep -vE '^(remote |remote-random-hostname|auth-federate|auth-user-pass|auth-retry interact)' "$1"
@@ -27,7 +32,7 @@ _connect() {
   ./bin/openvpn \
     --config <(_patch_config "$CONFIG") --auth-user-pass <(printf 'N/A\n%s\n' "$AUTH") \
     --verb 3 --dhcp-option DOMAIN-ROUTE . $EXTRAS \
-    --remote "$REMOTEHOST" "$REMOTEPORT"
+    --remote "$REMOTEADDR" "$REMOTEPORT"
 }
 
 SSO=$(_connect 'ACS::35001' | sed -rn -e 's/^.*(AUTH_FAILED,CRV1.*)$/\1/p')
