@@ -1,4 +1,7 @@
 VERSION ?= $(shell cat openvpn/version)
+CLEANUP = $(shell find bin/ -mindepth 1 -maxdepth 1 -type f -not -path '*/.*')
+
+all: build
 
 build:
 	docker build --file openvpn/Dockerfile.build --progress plain --output bin/ \
@@ -7,3 +10,7 @@ build:
 addpatch:
 	docker build --file openvpn/Dockerfile.patches --progress plain --output openvpn/patches/ \
 		--build-arg VERSION_A=$(VERSION_A) --build-arg VERSION_B=$(VERSION_B) .
+
+.PHONY: clean
+clean:
+	-rm $(CLEANUP)
