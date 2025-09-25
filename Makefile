@@ -1,5 +1,4 @@
 VERSION ?= $(shell cat openvpn/version)
-CLEANUP = $(shell find bin/ -mindepth 1 -maxdepth 1 -type f -not -path '*/.*')
 
 all: build
 
@@ -13,4 +12,4 @@ addpatch:
 
 .PHONY: clean
 clean:
-	-rm $(CLEANUP)
+	rm -f bin/openvpn bin/update-systemd-resolved
