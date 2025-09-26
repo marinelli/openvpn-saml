@@ -14,7 +14,7 @@ test -f "$_PATCH_A"
 
 git clone https://github.com/OpenVPN/openvpn.git openvpn.git
 cd openvpn.git
-git checkout "tags/v$_VERSION_B"
+git switch --detach "tags/v$_VERSION_B"
 
 patch -p1 <"../$_PATCH_A"
 git diff >"../$_PATCH_B"

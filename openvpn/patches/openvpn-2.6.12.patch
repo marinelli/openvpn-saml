@@ -1,5 +1,5 @@
 diff --git a/src/openvpn/buffer.h b/src/openvpn/buffer.h
-index d988ef25..37601756 100644
+index d988ef25..66ac439a 100644
 --- a/src/openvpn/buffer.h
 +++ b/src/openvpn/buffer.h
 @@ -27,7 +27,7 @@
@@ -7,12 +7,12 @@ index d988ef25..37601756 100644
  #include "error.h"
  
 -#define BUF_SIZE_MAX 1000000
-+#define BUF_SIZE_MAX 1 << 21
++#define BUF_SIZE_MAX (1 << 21)
  
  /*
   * Define verify_align function, otherwise
 diff --git a/src/openvpn/common.h b/src/openvpn/common.h
-index 3a84541c..61ee72e0 100644
+index 3a84541c..f3010bd8 100644
 --- a/src/openvpn/common.h
 +++ b/src/openvpn/common.h
 @@ -66,7 +66,7 @@ typedef unsigned long ptr_type;
@@ -20,12 +20,12 @@ index 3a84541c..61ee72e0 100644
   * This parameter must be >= PUSH_BUNDLE_SIZE
   */
 -#define TLS_CHANNEL_BUF_SIZE 2048
-+#define TLS_CHANNEL_BUF_SIZE 1 << 18
++#define TLS_CHANNEL_BUF_SIZE (1 << 18)
  
  /* TLS control buffer minimum size
   *
 diff --git a/src/openvpn/error.h b/src/openvpn/error.h
-index ab2872ae..cb0c68eb 100644
+index ab2872ae..e7fe796f 100644
 --- a/src/openvpn/error.h
 +++ b/src/openvpn/error.h
 @@ -34,7 +34,10 @@
@@ -36,7 +36,7 @@ index ab2872ae..cb0c68eb 100644
 +/*
 + * Increase the error buffer size to 256 KB.
 + */
-+#define ERR_BUF_SIZE 1 << 18
++#define ERR_BUF_SIZE (1 << 18)
  #endif
  
  struct gc_arena;
@@ -90,7 +90,7 @@ index 18965108..7284f105 100644
   * Management-interface-based deferred authentication
   */
 diff --git a/src/openvpn/misc.h b/src/openvpn/misc.h
-index 0dc08834..39e8373f 100644
+index 0dc08834..4f953592 100644
 --- a/src/openvpn/misc.h
 +++ b/src/openvpn/misc.h
 @@ -65,7 +65,10 @@ struct user_pass
@@ -101,7 +101,7 @@ index 0dc08834..39e8373f 100644
 +/*
 + * Increase the username and password length size to 128KB.
 + */
-+#define USER_PASS_LEN 1 << 17
++#define USER_PASS_LEN (1 << 17)
  #endif
      /* Note that username and password are expected to be null-terminated */
      char username[USER_PASS_LEN];
