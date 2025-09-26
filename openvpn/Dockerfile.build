@@ -11,5 +11,4 @@ ARG VERSION
 RUN sh /src/scripts/build.sh "$VERSION"
 
 FROM scratch AS export-stage
-COPY --from=build-stage /src/openvpn /
-COPY --from=build-stage /src/update-systemd-resolved /
+COPY --from=build-stage /src/bin/* /

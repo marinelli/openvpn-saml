@@ -5,7 +5,7 @@ apk update
 apk upgrade
 
 apk add \
-  gcc make patch pkgconf jq \
+  gcc make git patch pkgconf \
   musl-dev linux-headers \
   openssl-dev openssl-libs-static \
   libnl3-dev libnl3-static \
