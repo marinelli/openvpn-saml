@@ -12,7 +12,12 @@ _SOURCE="openvpn-${_VERSION}"
 _ARCHIVE="${_SOURCE}.tar.gz"
 _URL="https://github.com/OpenVPN/openvpn/releases/download/v${_VERSION}/${_ARCHIVE}"
 
-wget -q -O "$_ARCHIVE" "$_URL"
+if ! wget -q -O "$_ARCHIVE" "$_URL"; then
+  _ARCHIVE="v${_VERSION}.tar.gz"
+  _URL="https://github.com/OpenVPN/openvpn/archive/refs/tags/${_ARCHIVE}"
+  wget -q -O "$_ARCHIVE" "$_URL"
+  export _USE_GIT_TAG='1'
+fi
 
 _PATCH="patches/openvpn-${_VERSION}.patch"
 test -f "$_PATCH"
@@ -22,6 +27,9 @@ tar xf "$_ARCHIVE" --strip-components=1 -C "$_SOURCE"
 
 (
   cd "$_SOURCE"
+  if [ -n "$_USE_GIT_TAG" ]; then
+    autoreconf --verbose --force --install
+  fi
   patch -p1 <"../${_PATCH}"
   env LDFLAGS='--static' sh configure --disable-dco --disable-pkcs11 --disable-plugins
   make -j "$(nproc)"

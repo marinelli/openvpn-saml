@@ -7,6 +7,7 @@ apk upgrade
 apk add \
   gcc make git patch pkgconf \
   musl-dev linux-headers \
+  autoconf automake libtool \
   openssl-dev openssl-libs-static \
   libnl3-dev libnl3-static \
   libcap-ng-dev libcap-ng-static \
