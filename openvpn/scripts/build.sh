@@ -31,7 +31,7 @@ tar xf "$_ARCHIVE" --strip-components=1 -C "$_SOURCE"
     autoreconf --verbose --force --install
   fi
   patch -p1 <"../${_PATCH}"
-  env LDFLAGS='--static' sh configure --disable-dco --disable-pkcs11 --disable-plugins
+  env LDFLAGS='--static' sh configure --disable-pkcs11 --disable-plugins
   make -j "$(nproc)"
 )
 
