@@ -43,7 +43,7 @@ rm -fr "$_SOURCE" "$_ARCHIVE"
 # install update-systemd-resolved
 
 _SOURCE="update-systemd-resolved.git"
-git clone https://github.com/jonathanio/update-systemd-resolved.git "${_SOURCE}"
+git clone https://github.com/marinelli/update-systemd-resolved.git "${_SOURCE}"
 cp -a "${_SOURCE}/update-systemd-resolved" /src/bin/update-systemd-resolved
 cp -a "${_SOURCE}/LICENSE" /src/bin/update-systemd-resolved.LICENSE
 rm -fr "$_SOURCE"
