@@ -13,6 +13,10 @@ _ARCHIVE="${_SOURCE}.tar.gz"
 _URL="https://github.com/OpenVPN/openvpn/releases/download/v${_VERSION}/${_ARCHIVE}"
 
 if ! wget -q -O "$_ARCHIVE" "$_URL"; then
+  _URL="https://build.openvpn.net/downloads/releases/${_ARCHIVE}"
+fi
+
+if ! wget -q -O "$_ARCHIVE" "$_URL"; then
   _ARCHIVE="v${_VERSION}.tar.gz"
   _URL="https://github.com/OpenVPN/openvpn/archive/refs/tags/${_ARCHIVE}"
   wget -q -O "$_ARCHIVE" "$_URL"
