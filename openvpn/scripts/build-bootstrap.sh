@@ -9,6 +9,7 @@ apk add \
   musl-dev linux-headers \
   autoconf automake libtool \
   openssl-dev openssl-libs-static \
+  libbsd-dev libbsd-static \
   libnl3-dev libnl3-static \
   libcap-ng-dev libcap-ng-static \
   lzo-dev lz4-dev lz4-static

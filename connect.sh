@@ -10,6 +10,7 @@ cd "${0%/*}"
 
 [ -f 'bin/openvpn' ]
 [ -f 'bin/update-systemd-resolved' ]
+[ -f 'bin/nc' ]
 
 IFS=" " read -r -a REMOTE <<<"$(grep '^remote ' "$CONFIG")"
 REMOTEHOST="${REMOTE[1]}"
@@ -44,7 +45,7 @@ _saml_server() {
   local RESPONSE
   RESPONSE=$(
     printf 'HTTP/1.1 200 OK\r\n\r\n OK\r\n' |
-      nc -I2048 -w1 -l 127.0.0.1 35001 |
+      ./bin/nc -I2048 -w1 -l 127.0.0.1 35001 |
       sed -rn -e 's/^.*SAMLResponse=([^&]+).*$/\1\n/p'
   )
   local ENCODED
